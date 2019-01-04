@@ -30,6 +30,7 @@ class Canvas extends Component {
   }
 
   changeDirection = (e) => {
+    //TODO clean up
     switch(e.keyCode){
       case this.keys.right: if(this.state.direction !== "left") { this.setState({ direction: "right" }); } break;
       case this.keys.down: if(this.state.direction !== "up") { this.setState({ direction: "down" }); } break;
