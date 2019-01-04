@@ -14,4 +14,4 @@ You will also see any lint errors in the console.
 
 ### `yarn run deploy`
 
-Runs t
+deploy to github pages
