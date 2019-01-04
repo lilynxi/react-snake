@@ -1,9 +1,8 @@
 import React from 'react';
 import './Snake.css';
 
-const Snake = ({CELLSIZE}) => {
-  console.log(CELLSIZE);
-  return <div className="snake" style={{ width: `${CELLSIZE}px`, height: `${CELLSIZE}px` }}></div>
+const Snake = ({cellSize, left, top}) => {
+  return <div className="snake" style={{ width: `${cellSize}px`, height: `${cellSize}px`, left: `${left}px`, top: `${top}px` }}></div>
 }
 
 export default Snake;
