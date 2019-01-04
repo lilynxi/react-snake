@@ -21,7 +21,6 @@ class Canvas extends Component {
     this.canvasHeight= props.appConfig.CANVASHEIGHT * props.appConfig.CELLSIZE;
     this.cellSize = props.appConfig.CELLSIZE;
     this.keys = {left: 37, up: 38, right: 39, down: 40};
-
   }
 
   componentDidMount = () => {
