@@ -1,0 +1,2 @@
+.canvas{background-color:#fff;position:relative}.snake{background-color:rgba(0,0,0,.5)}.food,.snake{border:thin solid #000;position:absolute}.food{background-color:rgba(0,0,255,.5);border-radius:50%}.app{margin-left:-8px;margin-top:-8px;width:100vw;height:96vh;background:#eee;display:flex;align-items:center;justify-content:center}
+/*# sourceMappingURL=main.54d804d5.chunk.css.map */
