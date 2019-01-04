@@ -5,8 +5,6 @@ import Food from './Food';
 
 class Canvas extends Component {
 
-  
-
   constructor(props) {
     super(props);
     this.state = {
@@ -16,6 +14,7 @@ class Canvas extends Component {
         {x:2, y:5, key:0 },
       ], 
       food : {x:5, y:2,},
+      direction: "up",
     };
 
     this.canvasWidth = props.appConfig.CANVASWIDTH * props.appConfig.CELLSIZE;
@@ -26,24 +25,33 @@ class Canvas extends Component {
   }
 
   componentDidMount = () => {
-    document.addEventListener('keydown', this.snakeMove);
-
-    //setInterval(snakeMove)
+    document.addEventListener('keydown', this.changeDirection);
+    setInterval(this.snakeMove, 200);
   }
 
-  snakeMove = (e) => {
-    let direction;
-
+  changeDirection = (e) => {
     switch(e.keyCode){
-      case this.keys.right: direction = { x:1, y:0, }; break;
-      case this.keys.down: direction = { x:0, y:1, }; break;
-      case this.keys.left: direction = { x:-1, y:0, }; break;
-      case this.keys.up: direction = { x:0, y:-1, }; break;
+      case this.keys.right: if(this.state.direction !== "left") { this.setState({ direction: "right" }); } break;
+      case this.keys.down: if(this.state.direction !== "up") { this.setState({ direction: "down" }); } break;
+      case this.keys.left: if(this.state.direction !== "right") { this.setState({ direction: "left" }); } break;
+      case this.keys.up: if(this.state.direction !== "down") { this.setState({ direction: "up" }); } break;
+      default: return; 
+    }
+  };
+
+  snakeMove = () => {
+    let dir;
+
+    switch(this.state.direction){
+      case "right": dir = { x:1, y:0, }; break;
+      case "down": dir= { x:0, y:1, }; break;
+      case "left": dir = { x:-1, y:0, }; break;
+      case "up": dir = { x:0, y:-1, }; break;
       default: return; 
     }
 
     const newSnake = [...this.state.snake];
-    const snakeElem = { x: newSnake[0].x+direction.x, y: newSnake[0].y+direction.y, key: newSnake[0].key+1, };
+    const snakeElem = { x: newSnake[0].x+dir.x, y: newSnake[0].y+dir.y, key: newSnake[0].key+1, };
 
     // prevent crash
     if(snakeElem.x >= this.props.appConfig.CANVASWIDTH){
@@ -73,11 +81,7 @@ class Canvas extends Component {
 
     this.setState({snake:newSnake});
   };
-
-
-
-
-
+ 
 
   render(){
     return (
@@ -90,7 +94,11 @@ class Canvas extends Component {
             top={this.cellSize * snake.y}
           />
         ))}
-        <Food cellSize={this.cellSize} left={this.cellSize * this.state.food.x} top={this.cellSize * this.state.food.y}/>
+        <Food
+          cellSize={this.cellSize}
+          left={this.cellSize * this.state.food.x}
+          top={this.cellSize * this.state.food.y}
+        />
       </div>
     );
 
