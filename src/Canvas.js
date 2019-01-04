@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './Canvas.css';
 import Snake from './Snake';
 import Food from './Food';
+import Button from './Button';
 
 class Canvas extends Component {
 
@@ -25,7 +26,7 @@ class Canvas extends Component {
 
   componentDidMount = () => {
     document.addEventListener('keydown', this.changeDirection);
-    setInterval(this.snakeMove, 200);
+    setInterval(this.snakeMove, 150);
   }
 
   changeDirection = (e) => {
@@ -80,11 +81,22 @@ class Canvas extends Component {
 
     this.setState({snake:newSnake});
   };
+
+  handleClick = (direction) => {
+    //TODO clean up
+    switch(direction){
+      case "right": if(this.state.direction !== "left") { this.setState({ direction: "right" }); } break;
+      case "down": if(this.state.direction !== "up") { this.setState({ direction: "down" }); } break;
+      case "left": if(this.state.direction !== "right") { this.setState({ direction: "left" }); } break;
+      case "up": if(this.state.direction !== "down") { this.setState({ direction: "up" }); } break;
+      default: return; 
+    }
+  }
  
 
   render(){
     return (
-      <div className="canvas" style={{ width: `${this.canvasWidth}px`, height: `${this.canvasHeight}px`}}>
+      <div className="canvas" style={{ width: `${this.canvasWidth}px`, height: `${this.canvasHeight}px`}} >
         {this.state.snake.map(snake => (
           <Snake
             key={snake.key}
@@ -98,6 +110,10 @@ class Canvas extends Component {
           left={this.cellSize * this.state.food.x}
           top={this.cellSize * this.state.food.y}
         />
+        <Button direction="right" handleClick={this.handleClick} />
+        <Button direction="down" handleClick={this.handleClick} />
+        <Button direction="left" handleClick={this.handleClick} />
+        <Button direction="up" handleClick={this.handleClick} />
       </div>
     );
 
