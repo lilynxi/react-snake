@@ -4,7 +4,7 @@ import Snake from './Snake';
 
 class Canvas extends Component {
 
-  KEYS = {left: 37, up: 38, right: 39, down: 40};
+  
 
   constructor(props) {
     super(props);
@@ -14,7 +14,13 @@ class Canvas extends Component {
         {x:2, y:4, key:1 },
         {x:2, y:5, key:0 },
       ], 
-    }
+    };
+
+    this.canvasWidth = props.appConfig.CANVASWIDTH * props.appConfig.CELLSIZE;
+    this.canvasHeight= props.appConfig.CANVASHEIGHT * props.appConfig.CELLSIZE;
+    this.cellSize = props.appConfig.CELLSIZE;
+    this.keys = {left: 37, up: 38, right: 39, down: 40};
+
   }
 
   componentDidMount = () => {
@@ -22,19 +28,34 @@ class Canvas extends Component {
   }
 
   handleKeyEvent = (e) => {
+    //const {canvasWidth, canvasHeight, cellSize} = this.props.canvas;
+    //console.log(this.canvasWidth);
 
     let direction;
 
     switch(e.keyCode){
-      case this.KEYS.right: direction = { x:1, y:0, }; break;
-      case this.KEYS.down: direction = { x:0, y:1, }; break;
-      case this.KEYS.left: direction = { x:-1, y:0, }; break;
-      case this.KEYS.up: direction = { x:0, y:-1, }; break;
+      case this.keys.right: direction = { x:1, y:0, }; break;
+      case this.keys.down: direction = { x:0, y:1, }; break;
+      case this.keys.left: direction = { x:-1, y:0, }; break;
+      case this.keys.up: direction = { x:0, y:-1, }; break;
       default: return; 
     }
 
     const newSnake = [...this.state.snake];
     const snakeElem = { x: newSnake[0].x+direction.x, y: newSnake[0].y+direction.y, key: newSnake[0].key+1, };
+    //console.log(snakeElem.x, this.props.appConfig.CANVASWIDTH);
+    if(snakeElem.x >= this.props.appConfig.CANVASWIDTH){
+      snakeElem.x = 0;
+    }
+    if(snakeElem.y >= this.props.appConfig.CANVASHEIGHT){
+      snakeElem.y = 0;
+    }
+    if(snakeElem.x < 0){
+      snakeElem.x = this.props.appConfig.CANVASWIDTH-1;
+    }
+    if(snakeElem.y < 0){
+      snakeElem.y = this.props.appConfig.CANVASHEIGHT-1;
+    }
     newSnake.unshift(snakeElem);
     newSnake.splice(-1,1);
 
@@ -45,16 +66,16 @@ class Canvas extends Component {
 
 
   render(){
-    const {canvasWidth, canvasHeight, cellSize} = this.props.canvas;
+    //const {canvasWidth, canvasHeight, cellSize} = this.props.canvas;
 
     return (
-      <div className="canvas" style={{ width: `${canvasWidth}px`, height: `${canvasHeight}px`}}>
+      <div className="canvas" style={{ width: `${this.canvasWidth}px`, height: `${this.canvasHeight}px`}}>
         {this.state.snake.map(snake => (
           <Snake
             key={snake.key}
-            cellSize={cellSize}
-            left={cellSize * snake.x}
-            top={cellSize * snake.y}
+            cellSize={this.cellSize}
+            left={this.cellSize * snake.x}
+            top={this.cellSize * snake.y}
           />
         ))}
         
