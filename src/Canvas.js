@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './Canvas.css';
 import Snake from './Snake';
+import Food from './Food';
 
 class Canvas extends Component {
 
@@ -14,6 +15,7 @@ class Canvas extends Component {
         {x:2, y:4, key:1 },
         {x:2, y:5, key:0 },
       ], 
+      food : {x:5, y:2,},
     };
 
     this.canvasWidth = props.appConfig.CANVASWIDTH * props.appConfig.CELLSIZE;
@@ -24,13 +26,12 @@ class Canvas extends Component {
   }
 
   componentDidMount = () => {
-    document.addEventListener('keydown', this.handleKeyEvent);
+    document.addEventListener('keydown', this.snakeMove);
+
+    //setInterval(snakeMove)
   }
 
-  handleKeyEvent = (e) => {
-    //const {canvasWidth, canvasHeight, cellSize} = this.props.canvas;
-    //console.log(this.canvasWidth);
-
+  snakeMove = (e) => {
     let direction;
 
     switch(e.keyCode){
@@ -43,7 +44,8 @@ class Canvas extends Component {
 
     const newSnake = [...this.state.snake];
     const snakeElem = { x: newSnake[0].x+direction.x, y: newSnake[0].y+direction.y, key: newSnake[0].key+1, };
-    //console.log(snakeElem.x, this.props.appConfig.CANVASWIDTH);
+
+    // prevent crash
     if(snakeElem.x >= this.props.appConfig.CANVASWIDTH){
       snakeElem.x = 0;
     }
@@ -56,18 +58,28 @@ class Canvas extends Component {
     if(snakeElem.y < 0){
       snakeElem.y = this.props.appConfig.CANVASHEIGHT-1;
     }
+
     newSnake.unshift(snakeElem);
-    newSnake.splice(-1,1);
+
+
+    // find food
+    if (snakeElem.x === this.state.food.x && snakeElem.y === this.state.food.y){
+      const newFoodX = Math.floor(Math.random() * this.props.appConfig.CANVASWIDTH);
+      const newFoodY = Math.floor(Math.random() * this.props.appConfig.CANVASHEIGHT);
+      this.setState({food : { x: newFoodX, y:newFoodY, }});
+    } else {
+      newSnake.splice(-1,1);
+    }
 
     this.setState({snake:newSnake});
-
   };
 
 
 
-  render(){
-    //const {canvasWidth, canvasHeight, cellSize} = this.props.canvas;
 
+
+
+  render(){
     return (
       <div className="canvas" style={{ width: `${this.canvasWidth}px`, height: `${this.canvasHeight}px`}}>
         {this.state.snake.map(snake => (
@@ -78,7 +90,7 @@ class Canvas extends Component {
             top={this.cellSize * snake.y}
           />
         ))}
-        
+        <Food cellSize={this.cellSize} left={this.cellSize * this.state.food.x} top={this.cellSize * this.state.food.y}/>
       </div>
     );
 
