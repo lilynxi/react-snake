@@ -15,3 +15,7 @@ You will also see any lint errors in the console.
 ### `yarn run deploy`
 
 deploy to github pages
+
+### Demo
+
+https://lilynxi.github.io/react-snake/
