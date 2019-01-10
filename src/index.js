@@ -9,6 +9,7 @@ class App extends Component {
     CANVASWIDTH: 18,
     CANVASHEIGHT: 18,
     CELLSIZE: 22,
+    INITIALSPEED: 400,
   };
 
   render(){
