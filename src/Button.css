@@ -3,26 +3,26 @@
     position: absolute;
 }
 
-.button-right {
+.button-ArrowRight {
     right: 0;
     top: 20%;
     height: 60%;
     width: 120px;
 }
 
-.button-down {
+.button-ArrowDown {
     bottom: 0;
     right: 20%;
     width: 60%;
     height: 120px;
 }
-.button-left {
+.button-ArrowLeft {
     left: 0;
     bottom: 20%;
     height: 60%;
     width: 120px;
 }
-.button-up {
+.button-ArrowUp {
     left: 20%;
     width: 60%;
     height: 120px;

@@ -35,16 +35,6 @@ class Canvas extends Component {
     this.interval = setInterval(this.snakeMove, this.speed);
   }
 
-  changeDirection = (e) => {
-    //TODO clean up
-    switch(e.key){
-      case "ArrowRight": if(this.state.direction !== "left") { this.setState({ direction: "right" }); } break;
-      case "ArrowDown": if(this.state.direction !== "up") { this.setState({ direction: "down" }); } break;
-      case "ArrowLeft": if(this.state.direction !== "right") { this.setState({ direction: "left" }); } break;
-      case "ArrowUp": if(this.state.direction !== "down") { this.setState({ direction: "up" }); } break;
-      default: return; 
-    }
-  };
 
   snakeMove = () => {
     let dir;
@@ -60,7 +50,7 @@ class Canvas extends Component {
     const newSnake = [...this.state.snake];
     const snakeElem = { x: newSnake[0].x+dir.x, y: newSnake[0].y+dir.y };
 
-    // prevent crash
+    // prevent crash with canvas
     if(snakeElem.x >= this.props.appConfig.CANVASWIDTH){
       snakeElem.x = 0;
     }
@@ -109,7 +99,6 @@ class Canvas extends Component {
         }
       }
 
-
       this.setState({food : newFood });
 
       this.speed = this.speed * 0.9
@@ -133,13 +122,20 @@ class Canvas extends Component {
     return filtered.length
   };
 
-  handleClick = (direction) => {
-    //TODO clean up
+  handleClick = direction => {
+    this.setDirection(direction);
+  };
+
+  changeDirection = e => {
+    this.setDirection(e.key);
+  };
+
+  setDirection = (direction) => {
     switch(direction){
-      case "right": if(this.state.direction !== "left") { this.setState({ direction: "right" }); } break;
-      case "down": if(this.state.direction !== "up") { this.setState({ direction: "down" }); } break;
-      case "left": if(this.state.direction !== "right") { this.setState({ direction: "left" }); } break;
-      case "up": if(this.state.direction !== "down") { this.setState({ direction: "up" }); } break;
+      case "ArrowRight": if(this.state.direction !== "left") { this.setState({ direction: "right" }); } break;
+      case "ArrowDown": if(this.state.direction !== "up") { this.setState({ direction: "down" }); } break;
+      case "ArrowLeft": if(this.state.direction !== "right") { this.setState({ direction: "left" }); } break;
+      case "ArrowUp": if(this.state.direction !== "down") { this.setState({ direction: "up" }); } break;
       default: return; 
     }
   }
@@ -150,7 +146,7 @@ class Canvas extends Component {
       <div className="canvas" style={{ width: `${this.canvasWidth}px`, height: `${this.canvasHeight}px`}} >
         {this.state.snake.map((snake, index) => (
           <Snake
-            key={`snake-limb-${index}`}
+            key={`snake-elem-${index}`}
             cellSize={this.cellSize}
             left={this.cellSize * snake.x}
             top={this.cellSize * snake.y}
@@ -161,10 +157,10 @@ class Canvas extends Component {
           left={this.cellSize * this.state.food.x}
           top={this.cellSize * this.state.food.y}
         />
-        <Button direction="right" handleClick={this.handleClick} />
-        <Button direction="down" handleClick={this.handleClick} />
-        <Button direction="left" handleClick={this.handleClick} />
-        <Button direction="up" handleClick={this.handleClick} />
+        <Button direction="ArrowRight" handleClick={this.handleClick} />
+        <Button direction="ArrowDown" handleClick={this.handleClick} />
+        <Button direction="ArrowLeft" handleClick={this.handleClick} />
+        <Button direction="ArrowUp" handleClick={this.handleClick} />
       </div>
     );
 
