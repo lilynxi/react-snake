@@ -3,6 +3,7 @@ import './Canvas.css';
 import Snake from './Snake';
 import Food from './Food';
 import Button from './Button';
+import Display from './Display';
 
 class Canvas extends Component {
 
@@ -17,7 +18,8 @@ class Canvas extends Component {
         {x:2, y:5 },
       ], 
       food : {x:5, y:2,},
-      direction: "up"
+      direction: "up",
+      count: 0,
     };
 
     this.canvasWidth = props.appConfig.CANVASWIDTH * props.appConfig.CELLSIZE;
@@ -34,7 +36,6 @@ class Canvas extends Component {
     clearInterval(this.interval)
     this.interval = setInterval(this.snakeMove, this.speed);
   }
-
 
   snakeMove = () => {
     let dir;
@@ -66,7 +67,7 @@ class Canvas extends Component {
 
     let isColliding = this.isColliding(snakeElem);
 
-
+    // reset the game
     if (isColliding){
       this.speed = this.props.appConfig.INITIALSPEED;
       this.createInterval();
@@ -77,7 +78,8 @@ class Canvas extends Component {
           {x:2, y:5 },
         ], 
         food : {x:5, y:2,},
-        direction: "up", 
+        direction: "up",
+        count: 0, 
       });
       return;
     };
@@ -99,10 +101,13 @@ class Canvas extends Component {
         }
       }
 
-      this.setState({food : newFood });
+      this.setState({
+        food : newFood,
+        count : this.state.count + 50,
+      });
 
-      this.speed = this.speed * 0.9
-      this.createInterval()
+      this.speed = Math.floor(this.speed * 0.95);
+      this.createInterval();
 
     } else {
       newSnake.splice(-1,1);
@@ -140,31 +145,31 @@ class Canvas extends Component {
     }
   }
  
-
   render(){
     return (
-      <div className="canvas" style={{ width: `${this.canvasWidth}px`, height: `${this.canvasHeight}px`}} >
-        {this.state.snake.map((snake, index) => (
-          <Snake
-            key={`snake-elem-${index}`}
+      <div>
+        <Display speed={this.speed} count={this.state.count}/>
+        <div className="canvas" style={{ width: `${this.canvasWidth}px`, height: `${this.canvasHeight}px`}} >
+          {this.state.snake.map((snake, index) => (
+            <Snake
+              key={`snake-elem-${index}`}
+              cellSize={this.cellSize}
+              left={this.cellSize * snake.x}
+              top={this.cellSize * snake.y}
+            />
+          ))}
+          <Food
             cellSize={this.cellSize}
-            left={this.cellSize * snake.x}
-            top={this.cellSize * snake.y}
+            left={this.cellSize * this.state.food.x}
+            top={this.cellSize * this.state.food.y}
           />
-        ))}
-        <Food
-          cellSize={this.cellSize}
-          left={this.cellSize * this.state.food.x}
-          top={this.cellSize * this.state.food.y}
-        />
-        <Button direction="ArrowRight" handleClick={this.handleClick} />
-        <Button direction="ArrowDown" handleClick={this.handleClick} />
-        <Button direction="ArrowLeft" handleClick={this.handleClick} />
-        <Button direction="ArrowUp" handleClick={this.handleClick} />
+          <Button direction="ArrowRight" handleClick={this.handleClick} />
+          <Button direction="ArrowDown" handleClick={this.handleClick} />
+          <Button direction="ArrowLeft" handleClick={this.handleClick} />
+          <Button direction="ArrowUp" handleClick={this.handleClick} />
+        </div>
       </div>
     );
-
-
   }
 }
 

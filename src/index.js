@@ -9,11 +9,13 @@ class App extends Component {
     CANVASWIDTH: 18,
     CANVASHEIGHT: 18,
     CELLSIZE: 22,
-    INITIALSPEED: 400,
+    INITIALSPEED: 300,
   };
 
   render(){
-    return <div className="app"><Canvas appConfig={this.appConfig} /></div>
+    return <div className="app">
+      <Canvas appConfig={this.appConfig} />
+    </div>
   }
 }
 

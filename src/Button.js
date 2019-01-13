@@ -6,7 +6,6 @@ class Button extends Component {
     this.props.handleClick(this.props.direction);
   }
 
-
   render(){
     return <div className={`button-${this.props.direction} button`} onClick={this.handleClick}></div>;
   }

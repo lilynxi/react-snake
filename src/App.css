@@ -5,6 +5,9 @@
     height: 96vh;
     background: #eee;
     display: flex;
+    flex-flow: column;
     align-items: center;
     justify-content: center;
+    font-family: sans-serif;
+    font-size: 14px;
 }
